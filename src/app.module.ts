@@ -6,6 +6,8 @@ import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { TasksModule } from './tasks/tasks.module';
 import { PrismaModule } from './prisma/prisma/prisma.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -25,6 +27,8 @@ import { PrismaModule } from './prisma/prisma/prisma.module';
       },
     }),
     TasksModule,
+    UsersModule,
+    AuthModule,
     PrismaModule,
   ],
 })

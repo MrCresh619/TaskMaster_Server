@@ -13,8 +13,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id                   Int @default(autoincrement()) @id
+  username             String  @unique
+  password             String
+  email                String  @unique
+  country              String
+  codeToResetPassword  String
+  refreshTokens        RefreshToken[]
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model JwtBlacklist {
+  id        Int    @id @default(autoincrement())
+  token     String @unique
+}
+
 model Task {
-  id  Int @default(autoincrement()) @id
-  title String
-  description String
+  id            Int @default(autoincrement()) @id
+  title         String
+  description   String
 }

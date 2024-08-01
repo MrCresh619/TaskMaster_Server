@@ -1,0 +1,56 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @upper on FIELD_DEFINITION
+
+type Task {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type AuthResponse {
+  access_token: String!
+  refresh_token: String!
+}
+
+type User {
+  """Example field (placeholder)"""
+  id: Int!
+
+  """Example field (placeholder)"""
+  username: String!
+
+  """Example field (placeholder)"""
+  password: String!
+}
+
+type LogoutResponse {
+  success: Boolean!
+}
+
+type Query {
+  tasks: [Task!]!
+  task(id: Int!): Task!
+  allUsers: [User!]!
+  getMe: User!
+}
+
+type Mutation {
+  createTask(createTaskInput: CreateTaskInput!): Task!
+  updateTask(updateTaskInput: UpdateTaskInput!): Task!
+  removeTask(id: Int!): Task!
+  login(username: String!, password: String!): AuthResponse!
+  logout: LogoutResponse!
+}
+
+input CreateTaskInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateTaskInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}

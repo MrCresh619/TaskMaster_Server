@@ -34,7 +34,7 @@ export class AuthService {
     };
   }
 
-  async createRefreshToken(userId: number) {
+  async createRefreshToken(userId: string) {
     const token = this.jwtService.sign({ userId }, { expiresIn: '7d' });
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 dni
 
@@ -74,7 +74,7 @@ export class AuthService {
     });
   }
 
-  async validateUserById(userId: number): Promise<any> {
+  async validateUserById(userId: string): Promise<any> {
     return this.prisma.user.findUnique({ where: { id: userId } });
   }
   async isTokenBlacklisted(token: string): Promise<boolean> {

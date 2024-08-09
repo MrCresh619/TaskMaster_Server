@@ -14,18 +14,19 @@ datasource db {
 }
 
 model User {
-  id                   Int @default(autoincrement()) @id
+  id                   String @default(uuid()) @id
   username             String  @unique
   password             String
   email                String  @unique
   country              String
   codeToResetPassword  String
   refreshTokens        RefreshToken[]
+  tasks                Task[]  @relation("UserTasks")
 }
 
 model RefreshToken {
   id        Int      @id @default(autoincrement())
-  userId    Int
+  userId    String
   token     String   @unique
   expiresAt DateTime
   user      User     @relation(fields: [userId], references: [id])
@@ -37,7 +38,24 @@ model JwtBlacklist {
 }
 
 model Task {
-  id            Int @default(autoincrement()) @id
-  title         String
-  description   String
+  id          String   @id @default(uuid()) @unique
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], name: "UserTasks")
+  title       String
+  description String?  
+  createDate  DateTime @default(now())
+  status      Status   @default(ACTIVE)
+  taskDate    DateTime?
+  isEvent     Boolean  @default(false)
+  eventStart  DateTime?
+  eventEnd    DateTime?
+
+  @@map("tasks")
+}
+
+enum Status {
+  ACTIVE
+  DONE
+  ARCHIVED
+  IN_PROGRESS
 }

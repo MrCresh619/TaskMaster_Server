@@ -1,35 +1,49 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
 import { TasksService } from './tasks.service';
 import { Task } from './entities/task.entity';
 import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/auth.guard';
 
 @Resolver(() => Task)
 export class TasksResolver {
   constructor(private readonly tasksService: TasksService) {}
 
   @Mutation(() => Task)
-  createTask(@Args('createTaskInput') createTaskInput: CreateTaskInput) {
-    return this.tasksService.create(createTaskInput);
+  @UseGuards(GqlAuthGuard)
+  createTask(@Args('createTaskInput') createTaskInput: CreateTaskInput, @Context() context?: any) {
+    return this.tasksService.create(createTaskInput, context.req.user.id);
   }
 
   @Query(() => [Task], { name: 'tasks' })
-  findAll() {
-    return this.tasksService.findAll();
+  @UseGuards(GqlAuthGuard)
+  findAll(@Context() context: any) {
+    const userId = context.req.user.id
+    return this.tasksService.findAll(userId);
   }
 
   @Query(() => Task, { name: 'task' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.tasksService.findOne(id);
+  @UseGuards(GqlAuthGuard)
+  findOne(@Args('id', { type: () => String }) id: string,  @Context() context: any) {
+    const userId = context.req.user.id
+    return this.tasksService.findOne(id, userId);
   }
 
   @Mutation(() => Task)
-  updateTask(@Args('updateTaskInput') updateTaskInput: UpdateTaskInput) {
-    return this.tasksService.update(updateTaskInput.id, updateTaskInput);
+  @UseGuards(GqlAuthGuard)
+  updateTask(@Context() context: any, @Args('updateTaskInput') updateTaskInput: UpdateTaskInput, ) {
+    return this.tasksService.update(updateTaskInput.id, context.req.user.id, updateTaskInput);
   }
 
   @Mutation(() => Task)
-  removeTask(@Args('id', { type: () => Int }) id: number) {
-    return this.tasksService.remove(id);
+  @UseGuards(GqlAuthGuard)
+  removeTask(@Args('id', { type: () => String }) id: string, @Context() context: any) {
+    return this.tasksService.remove(id, context.req.user.id);
+  }
+  @Mutation(() => Task)
+  @UseGuards(GqlAuthGuard)
+  archiveTask( @Args('id', { type: () => String }) id: string, @Context() context: any){
+    return this.tasksService.archiveTask(id, context.req.user.id)
   }
 }

@@ -7,7 +7,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   dotenv.config();
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(3000);
+  app.enableCors({
+    origin: 'http://localhost:3000',  // Adres frontendowego serwera
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,  // Jeśli używasz ciasteczek lub sesji
+  });
+  await app.listen(process.env.PORT || 8887);
 
   console.log(
     `Application is running on: http://localhost:${process.env.PORT}/graphql`,

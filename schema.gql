@@ -29,11 +29,6 @@ enum Status {
   IN_PROGERES
 }
 
-type AuthResponse {
-  access_token: String!
-  refresh_token: String!
-}
-
 type User {
   """Example field (placeholder)"""
   id: String!
@@ -43,6 +38,13 @@ type User {
 
   """Example field (placeholder)"""
   password: String!
+}
+
+type AuthResponse {
+  access_token: String!
+  access_token_expires_at: String!
+  refresh_token: String!
+  refresh_token_expires_at: String!
 }
 
 type LogoutResponse {
@@ -63,6 +65,8 @@ type Mutation {
   archiveTask(id: String!): Task!
   login(username: String!, password: String!): AuthResponse!
   logout: LogoutResponse!
+  refreshToken(token: String!): AuthResponse!
+  registerUser(email: String!, password: String!, username: String!): User!
 }
 
 input CreateTaskInput {

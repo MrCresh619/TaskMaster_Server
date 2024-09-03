@@ -7,8 +7,8 @@ import { PrismaService } from 'src/prisma/prisma/prisma.service';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  create(createUserInput: CreateUserInput) {
-    return 'This action adds a new user';
+  register(createUserInput: CreateUserInput) {
+    return this.prisma.user.create({data: createUserInput});
   }
 
   findAll() {

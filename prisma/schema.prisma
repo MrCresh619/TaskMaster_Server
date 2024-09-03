@@ -14,12 +14,13 @@ datasource db {
 }
 
 model User {
-  id                   String @default(uuid()) @id
+  id                   String  @default(uuid()) @id
   username             String  @unique
   password             String
   email                String  @unique
-  country              String
-  codeToResetPassword  String
+  country              String?
+  codeToResetPassword  String? 
+  createDate  DateTime @default(now())
   refreshTokens        RefreshToken[]
   tasks                Task[]  @relation("UserTasks")
 }

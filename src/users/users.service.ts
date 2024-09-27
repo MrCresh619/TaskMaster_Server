@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
 import { PrismaService } from 'src/prisma/prisma/prisma.service';
 
 @Injectable()
@@ -15,16 +14,15 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  findOne(username: string, password: string) {
+  findOne(username: string) {
     return this.prisma.user.findFirst({
       where: {
         username: username,
-        password: password,
       },
     });
   }
 
-  update(username: string, updateUserInput: UpdateUserInput) {
+  update(username: string) {
     return `This action updates a #${username} user`;
   }
 

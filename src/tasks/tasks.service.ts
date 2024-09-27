@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma/prisma.service';
 import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
-import { PrismaService } from 'src/prisma/prisma/prisma.service';
-import { Task } from '@prisma/client';
 
 @Injectable()
 export class TasksService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createTaskInput: CreateTaskInput, userId: string): Promise<Task> {
+  async create(createTaskInput: CreateTaskInput, userId: string) {
     const taskData = {
       ...createTaskInput,
       userId,
@@ -19,15 +18,15 @@ export class TasksService {
     });
   }
 
-  async findAll(userId: string): Promise<Task[]> {
+  async findAll(userId: string) {
     return this.prisma.task.findMany({ where: { userId } });
   }
 
-  async findOne(id: string, userId: string): Promise<Task | null> {
+  async findOne(id: string, userId: string) {
     return this.prisma.task.findFirst({ where: { id, userId } });
   }
 
-  async update(id: string, userId: string, updateTaskInput: UpdateTaskInput): Promise<Task> {
+  async update(id: string, userId: string, updateTaskInput: UpdateTaskInput) {
     await this.ensureTaskExists(id, userId);
 
     return this.prisma.task.update({
@@ -36,7 +35,7 @@ export class TasksService {
     });
   }
 
-  async archiveTask(id: string, userId: string): Promise<Task> {
+  async archiveTask(id: string, userId: string) {
     await this.ensureTaskExists(id, userId);
 
     return this.prisma.task.update({
@@ -45,7 +44,7 @@ export class TasksService {
     });
   }
 
-  async remove(id: string, userId: string): Promise<Task> {
+  async remove(id: string, userId: string) {
     await this.ensureTaskExists(id, userId);
 
     return this.prisma.task.delete({

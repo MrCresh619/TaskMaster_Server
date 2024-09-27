@@ -35,9 +35,6 @@ type User {
 
   """Example field (placeholder)"""
   username: String!
-
-  """Example field (placeholder)"""
-  password: String!
 }
 
 type AuthResponse {
